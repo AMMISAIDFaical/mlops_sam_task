@@ -1,10 +1,9 @@
 import os
-
 import numpy as np
 import torch
 from mobile_sam import SamAutomaticMaskGenerator, SamPredictor, sam_model_registry
 from PIL import Image
-
+from tqdm import tqdm
 from tools import box_prompt, format_results, point_prompt, fast_process
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -30,15 +29,20 @@ def segment_everything(
 ):
     global mask_generator
 
+    pbar = tqdm(total=5, desc="Segmenting")  # Initialize progress bar with 5 steps
+
     input_size = int(input_size)
+    print("Input image type:", type(image))
     w, h = image.size
     scale = input_size / max(w, h)
     new_w = int(w * scale)
     new_h = int(h * scale)
     image = image.resize((new_w, new_h))
+    pbar.update(1)  # Update progress after resizing
 
     nd_image = np.array(image)
     annotations = mask_generator.generate(nd_image)
+    pbar.update(1)  # Update progress after generating mask
 
     fig = fast_process(
         annotations=annotations,
@@ -51,9 +55,10 @@ def segment_everything(
         use_retina=use_retina,
         withContours=withContours,
     )
+    pbar.update(3)  # Final update after processing
+
+    pbar.close()  # Ensure the progress bar is closed after the function finishes
     return fig
-
-
 
 if __name__ == "__main__":
     input_path = "resources/dog.jpg"
@@ -65,4 +70,5 @@ if __name__ == "__main__":
     fig = segment_everything(
         image=image
     )
+    print("Output figure type:", type(fig))
     fig.save(output_path)

@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from PIL import Image
+from tqdm import tqdm
 
 
 def convert_box_xywh_to_xyxy(box):
@@ -32,48 +33,41 @@ def segment_image(image, bbox):
     black_image.paste(segmented_image, mask=transparency_mask_image)
     return black_image
 
-
 def format_results(masks, scores, logits, filter=0):
     annotations = []
     n = len(scores)
+    pbar = tqdm(total=n, desc="Formatting Results")
     for i in range(n):
+        pbar.update(1)
         annotation = {}
-
         mask = masks[i]
         tmp = np.where(mask != 0)
         if np.sum(mask) < filter:
             continue
         annotation["id"] = i
         annotation["segmentation"] = mask
-        annotation["bbox"] = [
-            np.min(tmp[0]),
-            np.min(tmp[1]),
-            np.max(tmp[1]),
-            np.max(tmp[0]),
-        ]
+        annotation["bbox"] = [np.min(tmp[0]), np.min(tmp[1]), np.max(tmp[1]), np.max(tmp[0])]
         annotation["score"] = scores[i]
         annotation["area"] = annotation["segmentation"].sum()
         annotations.append(annotation)
+    pbar.close()
     return annotations
 
 
-def filter_masks(annotations):  # filter the overlap mask
+def filter_masks(annotations):
     annotations.sort(key=lambda x: x["area"], reverse=True)
     to_remove = set()
+    pbar = tqdm(total=len(annotations), desc="Filtering Masks")
     for i in range(0, len(annotations)):
         a = annotations[i]
         for j in range(i + 1, len(annotations)):
             b = annotations[j]
             if i != j and j not in to_remove:
-                # check if
-                if b["area"] < a["area"]:
-                    if (a["segmentation"] & b["segmentation"]).sum() / b[
-                        "segmentation"
-                    ].sum() > 0.8:
-                        to_remove.add(j)
-
+                if b["area"] < a["area"] and (a["segmentation"] & b["segmentation"]).sum() / b["segmentation"].sum() > 0.8:
+                    to_remove.add(j)
+        pbar.update(1)
+    pbar.close()
     return [a for i, a in enumerate(annotations) if i not in to_remove], to_remove
-
 
 def get_bbox_from_mask(mask):
     mask = mask.astype(np.uint8)
