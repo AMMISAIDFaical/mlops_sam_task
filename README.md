@@ -129,7 +129,7 @@ async def segment_img(file: bytes = File(...)):
 
 # Overview of the code
 * [main.py](./main.py) - Base SAM implementation method and run saves result in /generated   
-* [app.py](./api.py) - FASTAPI functions and api endpoints def     
+* [api.py](./api/api.py) - FASTAPI functions and api endpoints def     
 * [tools.py](tools.py) - SAM helper functions
 ---
 # Attention:
