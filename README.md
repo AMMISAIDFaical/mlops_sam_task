@@ -6,7 +6,7 @@ The project also includes Docker, a platform for easily building, shipping, and 
 
 ### Sample
 Here's a sample of what you can expect to see with this project:
-<img width=600 src="./resources/dog.jpg" alt="sample example of the results of SAM segmentation">
+<img width=600 src="./generated/Screenshot_te_segmentation.png" alt="sample example of the results of SAM segmentation">
 
 # Getting Started
 You have two options to start the application: using Docker or locally on your machine.
