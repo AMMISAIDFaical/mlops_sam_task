@@ -6,7 +6,7 @@ The project also includes Docker, a platform for easily building, shipping, and 
 
 ### Sample
 Here's a sample of what you can expect to see with this project:
-<img width=600 src="./generated/Screenshot_te_segmentation.png" alt="sample example of the results of SAM segmentation">
+<img width=600 src="./generated/output_docker_try.png" alt="FASTAPI">    
 
 # Getting Started
 You have two options to start the application: using Docker or locally on your machine.
@@ -40,7 +40,7 @@ machine and assuming that you will use the cpu "my machine mine took 4 min" )
 ### FASTAPI Docs url:
 http://localhost:8000/docs#/
 
-<img width=600 src="./generated/Screenshot_te_segmentation.png" alt="FASTAPI">    
+<img width=600 src="./generated/output.png" alt="FASTAPI">    
 
 ---
 # Code Breakdown

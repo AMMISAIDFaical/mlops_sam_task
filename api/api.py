@@ -43,7 +43,7 @@ async def segment_img(file: bytes = File(...)):
         image = img
     )
     # return image in bytes format
-    return StreamingResponse(content=get_bytes_from_image(seg_img), media_type="image/jpeg")
+    return StreamingResponse(content=get_bytes_from_image(seg_img), media_type="image/png")
 
 if __name__ == '__main__':
     uvicorn.run("api:app", host="0.0.0.0",

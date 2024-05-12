@@ -61,7 +61,7 @@ def segment_everything(
     return fig
 
 if __name__ == "__main__":
-    input_path = "resources/dog.jpg"
+    input_path = "resources/Eiffel-Tower-Picnic.jpg"
     output_path = "generated/output.png"
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
